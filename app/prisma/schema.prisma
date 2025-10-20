@@ -1,0 +1,193 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  OWNER
+  ADMIN
+  COACH
+  PLAYER
+}
+
+enum Position {
+  GK
+  DF
+  MF
+  FW
+}
+
+enum MatchStatus {
+  SCHEDULED
+  PLAYED
+  CANCELED
+}
+
+enum AvailabilityStatus {
+  YES
+  NO
+  MAYBE
+}
+
+enum ChatRoomType {
+  TEAM
+  MATCH
+}
+
+model User {
+  id           String        @id @default(cuid())
+  name         String
+  email        String        @unique
+  passwordHash String
+  avatarUrl    String?
+  createdAt    DateTime      @default(now())
+  teams        Membership[]
+  createdTeams Team[]        @relation("UserTeams")
+  invitations  Invitation[]  @relation("UserInvitations")
+  notifications Notification[]
+  messages     ChatMessage[]
+}
+
+model Team {
+  id          String        @id @default(cuid())
+  name        String
+  slug        String        @unique
+  crestUrl    String?
+  createdAt   DateTime      @default(now())
+  createdBy   User          @relation("UserTeams", fields: [createdById], references: [id])
+  createdById String
+  members     Membership[]
+  invitations Invitation[]
+  matches     Match[]
+  chatRooms   ChatRoom[]
+  boardRoles  BoardRole[]
+}
+
+model Membership {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  team      Team     @relation(fields: [teamId], references: [id])
+  teamId    String
+  role      Role     @default(PLAYER)
+  number    Int?
+  position  Position?
+  joinedAt  DateTime @default(now())
+  availability Availability[]
+  lineupSlots   LineupSlot[]
+  boardRole     BoardRole?
+
+  @@unique([userId, teamId])
+}
+
+model Invitation {
+  id           String   @id @default(cuid())
+  team         Team     @relation(fields: [teamId], references: [id])
+  teamId       String
+  email        String
+  token        String   @unique
+  roleDefault  Role     @default(PLAYER)
+  expiresAt    DateTime
+  acceptedAt   DateTime?
+  createdBy    User     @relation("UserInvitations", fields: [createdById], references: [id])
+  createdById  String
+  createdAt    DateTime @default(now())
+}
+
+model Match {
+  id          String      @id @default(cuid())
+  team        Team        @relation(fields: [teamId], references: [id])
+  teamId      String
+  opponent    String
+  location    String
+  kickoffAt   DateTime
+  notes       String?
+  createdAt   DateTime    @default(now())
+  status      MatchStatus @default(SCHEDULED)
+  competition String?
+  availability Availability[]
+  lineup      Lineup?
+  chatRoom    ChatRoom?
+}
+
+model Availability {
+  id        String              @id @default(cuid())
+  match     Match               @relation(fields: [matchId], references: [id])
+  matchId   String
+  user      User                @relation(fields: [userId], references: [id])
+  userId    String
+  status    AvailabilityStatus  @default(MAYBE)
+  updatedAt DateTime            @updatedAt
+
+  @@unique([matchId, userId])
+}
+
+model Lineup {
+  id        String   @id @default(cuid())
+  match     Match    @relation(fields: [matchId], references: [id])
+  matchId   String   @unique
+  formation String
+  notes     String?
+  slots     LineupSlot[]
+  published Boolean  @default(false)
+}
+
+model LineupSlot {
+  id           String      @id @default(cuid())
+  lineup       Lineup      @relation(fields: [lineupId], references: [id])
+  lineupId     String
+  membership   Membership  @relation(fields: [membershipId], references: [id])
+  membershipId String
+  positionLabel String
+  x            Float
+  y            Float
+}
+
+model ChatRoom {
+  id        String        @id @default(cuid())
+  team      Team          @relation(fields: [teamId], references: [id])
+  teamId    String
+  type      ChatRoomType
+  match     Match?        @relation(fields: [matchId], references: [id])
+  matchId   String?
+  messages  ChatMessage[]
+
+  @@index([teamId, type])
+}
+
+model ChatMessage {
+  id        String   @id @default(cuid())
+  room      ChatRoom @relation(fields: [roomId], references: [id])
+  roomId    String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  content   String
+  createdAt DateTime @default(now())
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  type      String
+  payload   Json
+  readAt    DateTime?
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
+}
+
+model BoardRole {
+  id           String      @id @default(cuid())
+  team         Team        @relation(fields: [teamId], references: [id])
+  teamId       String
+  membership   Membership  @relation(fields: [membershipId], references: [id])
+  membershipId String
+  title        String
+
+  @@unique([teamId, title])
+}
