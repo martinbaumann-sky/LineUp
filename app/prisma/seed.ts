@@ -1,4 +1,11 @@
-import { PrismaClient, Role, Position, MatchStatus, AvailabilityStatus } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
+import {
+  Role,
+  Position,
+  MatchStatus,
+  AvailabilityStatus,
+  ChatRoomType
+} from "../types/enums";
 import { hash } from "bcrypt";
 
 const prisma = new PrismaClient();
@@ -45,7 +52,7 @@ async function main() {
       },
       chatRooms: {
         create: {
-          type: "TEAM"
+          type: ChatRoomType.TEAM
         }
       }
     },
@@ -159,7 +166,7 @@ async function main() {
     await prisma.chatRoom.create({
       data: {
         teamId: team.id,
-        type: "MATCH",
+        type: ChatRoomType.MATCH,
         matchId: nextMatch.id
       }
     });

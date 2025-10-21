@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { assertRole } from "@/lib/actions/guards";
-import { Role } from "@prisma/client";
+import { Role } from "@/types/enums";
 import { slugify } from "@/lib/utils";
 
 describe("guard helpers", () => {
