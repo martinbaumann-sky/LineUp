@@ -1,5 +1,4 @@
 import Link from "next/link";
-import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
 const highlights = [
@@ -8,12 +7,7 @@ const highlights = [
   "Perfiles personalizables para todo el plantel"
 ];
 
-export const metadata: Metadata = {
-  title: "LineUp | Acceso",
-  description: "Ingresa para gestionar tu equipo."
-};
-
-export default function AuthLayout({ children }: { children: ReactNode }) {
+export function AuthShell({ children }: { children: ReactNode }) {
   return (
     <div className="relative min-h-screen overflow-hidden bg-slate-950">
       <div
