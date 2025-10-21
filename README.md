@@ -36,15 +36,24 @@ LineUp es una plataforma web para la gestión integral de equipos de fútbol ama
 
 ## Setup local
 
+### Windows (script automatizado)
+
+1. Clona el repositorio y entra en la carpeta `LineUp`.
+2. Haz doble click en `start-lineup.bat` (o ejecuta `start-lineup.bat` desde una terminal de PowerShell/CMD).
+3. El script creará el archivo `.env` si no existe, instalará dependencias, sincronizará la base SQLite y sembrará datos demo antes de abrir el servidor de desarrollo en `http://localhost:3000`.
+
+### Manual (cualquier sistema operativo)
+
 ```bash
 git clone https://github.com/TU-USUARIO/LineUp.git
-cd LineUp
+cd LineUp/app
 
-cp .env.example .env   # Actualiza los secretos y URLs si es necesario
+cp ../.env.example .env   # Ajusta secretos y URLs si es necesario
 
 npm install
 npx prisma generate
-npx prisma migrate dev --name init
+npx prisma db push
+npx tsx prisma/seed.ts
 npm run dev
 ```
 
