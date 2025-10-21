@@ -25,10 +25,10 @@ export default async function DashboardLayout({
   });
 
   const header = (
-    <header className="border-b border-border bg-background/80 backdrop-blur">
+    <header className="border-b border-primary/10 bg-gradient-to-r from-background/95 via-primary/5 to-transparent backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <div>
-          <h1 className="text-lg font-semibold">
+          <h1 className="text-lg font-semibold text-foreground">
             {membership ? membership.team.name : "Bienvenido a LineUp"}
           </h1>
           <p className="text-sm text-muted-foreground">
@@ -45,7 +45,7 @@ export default async function DashboardLayout({
   );
 
   const body = (
-    <div className="min-h-screen bg-muted/10">
+    <div className="min-h-screen bg-gradient-to-b from-background via-secondary/40 to-background">
       {header}
       <main className="mx-auto w-full max-w-6xl px-6 py-6">{children}</main>
     </div>
