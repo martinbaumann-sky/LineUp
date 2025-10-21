@@ -42,6 +42,16 @@ LineUp es una plataforma web para la gestión integral de equipos de fútbol ama
 2. Haz doble click en `start-lineup.bat` (o ejecuta `start-lineup.bat` desde una terminal de PowerShell/CMD).
 3. El script creará el archivo `.env` si no existe, instalará dependencias, sincronizará la base SQLite y sembrará datos demo antes de abrir el servidor de desarrollo en `http://localhost:3000`.
 
+### macOS / Linux (script automatizado)
+
+```bash
+cd LineUp
+chmod +x setup-lineup.sh   # Solo la primera vez
+./setup-lineup.sh          # Añade --no-start o --skip-seed si lo necesitas
+```
+
+Por defecto se instalan dependencias, se ejecuta Prisma (generate + migrate/db push), se cargan los datos de ejemplo y se inicia `npm run dev`. Usa `--no-start` para solo preparar el entorno o `--skip-seed` para omitir los datos demo.
+
 ### Manual (cualquier sistema operativo)
 
 ```bash
