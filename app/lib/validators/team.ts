@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { Role } from "@prisma/client";
+import { ROLE_VALUES } from "@/types/enums";
 
 export const teamSchema = z.object({
   name: z.string().min(3, "Nombre muy corto"),
@@ -8,7 +8,7 @@ export const teamSchema = z.object({
 
 export const invitationSchema = z.object({
   email: z.string().email(),
-  role: z.nativeEnum(Role),
+  role: z.enum(ROLE_VALUES as [typeof ROLE_VALUES[number], ...typeof ROLE_VALUES[number][]]),
   expiresAt: z.coerce.date()
 });
 

@@ -1,14 +1,15 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { Role } from "@prisma/client";
+import { Role, ensureRole } from "@/types/enums";
 import { prisma } from "@/lib/prisma";
 import { assertRole, requireMembership } from "@/lib/actions/guards";
 import { boardRoleSchema } from "@/lib/validators/team";
 
 export async function upsertBoardRole(teamId: string, formData: FormData) {
   const { membership } = await requireMembership(teamId);
-  assertRole(membership.role, [Role.OWNER, Role.ADMIN]);
+  const role = ensureRole(membership.role);
+  assertRole(role, [Role.OWNER, Role.ADMIN]);
   const payload = Object.fromEntries(formData.entries());
   const parsed = boardRoleSchema.safeParse(payload);
   if (!parsed.success) {
@@ -36,7 +37,8 @@ export async function upsertBoardRole(teamId: string, formData: FormData) {
 
 export async function removeBoardRole(teamId: string, title: string) {
   const { membership } = await requireMembership(teamId);
-  assertRole(membership.role, [Role.OWNER, Role.ADMIN]);
+  const role = ensureRole(membership.role);
+  assertRole(role, [Role.OWNER, Role.ADMIN]);
   await prisma.boardRole.delete({ where: { teamId_title: { teamId, title } } });
   revalidatePath("/dashboard/directiva");
 }

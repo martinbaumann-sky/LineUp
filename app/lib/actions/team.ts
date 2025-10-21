@@ -3,7 +3,7 @@
 import { randomBytes } from "crypto";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { Role } from "@prisma/client";
+import { Role, ensureRole } from "@/types/enums";
 import { prisma } from "@/lib/prisma";
 import { requireAuth, requireMembership, assertRole } from "@/lib/actions/guards";
 import { slugify } from "@/lib/utils";
@@ -49,7 +49,8 @@ export async function createTeam(formData: FormData) {
 
 export async function updateTeam(teamId: string, payload: { name: string; crestUrl?: string | null }) {
   const { membership } = await requireMembership(teamId);
-  assertRole(membership.role, [Role.OWNER, Role.ADMIN]);
+  const role = ensureRole(membership.role);
+  assertRole(role, [Role.OWNER, Role.ADMIN]);
 
   await prisma.team.update({
     where: { id: teamId },
@@ -64,14 +65,16 @@ export async function updateTeam(teamId: string, payload: { name: string; crestU
 
 export async function deleteTeam(teamId: string) {
   const { membership } = await requireMembership(teamId);
-  assertRole(membership.role, [Role.OWNER]);
+  const role = ensureRole(membership.role);
+  assertRole(role, [Role.OWNER]);
   await prisma.team.delete({ where: { id: teamId } });
   redirect("/dashboard/configuracion?deleted=1");
 }
 
 export async function leaveTeam(teamId: string) {
   const { membership } = await requireMembership(teamId);
-  if (membership.role === Role.OWNER) {
+  const role = ensureRole(membership.role);
+  if (role === Role.OWNER) {
     throw new Error("El propietario no puede salir sin transferir la propiedad");
   }
   await prisma.membership.delete({ where: { id: membership.id } });
@@ -80,7 +83,8 @@ export async function leaveTeam(teamId: string) {
 
 export async function generateInvitation(teamId: string, formData: FormData) {
   const { membership } = await requireMembership(teamId);
-  assertRole(membership.role, [Role.OWNER, Role.ADMIN, Role.COACH]);
+  const role = ensureRole(membership.role);
+  assertRole(role, [Role.OWNER, Role.ADMIN, Role.COACH]);
   const payload = Object.fromEntries(formData.entries());
   const parsed = invitationSchema.safeParse(payload);
   if (!parsed.success) {
@@ -103,7 +107,8 @@ export async function generateInvitation(teamId: string, formData: FormData) {
 
 export async function updateMembershipRole(teamId: string, membershipId: string, role: Role) {
   const { membership } = await requireMembership(teamId);
-  assertRole(membership.role, [Role.OWNER, Role.ADMIN]);
+  const currentRole = ensureRole(membership.role);
+  assertRole(currentRole, [Role.OWNER, Role.ADMIN]);
   await prisma.membership.update({ where: { id: membershipId }, data: { role } });
   revalidatePath("/dashboard/directiva");
 }

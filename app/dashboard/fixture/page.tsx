@@ -1,4 +1,4 @@
-import { MatchStatus, Role } from "@prisma/client";
+import { MATCH_STATUS_VALUES, Role, ensureRole } from "@/types/enums";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth/session";
 import { prisma } from "@/lib/prisma";
@@ -24,7 +24,8 @@ export default async function FixturePage() {
     include: { availability: true }
   });
 
-  const canManage = [Role.OWNER, Role.ADMIN, Role.COACH].includes(membership.role);
+  const membershipRole = ensureRole(membership.role);
+  const canManage = [Role.OWNER, Role.ADMIN, Role.COACH].includes(membershipRole);
 
   return (
     <div className="grid gap-6 lg:grid-cols-[2fr,1fr]">
@@ -60,7 +61,7 @@ export default async function FixturePage() {
               </div>
               {canManage ? (
                 <div className="flex flex-wrap gap-2">
-                  {Object.values(MatchStatus).map((status) => (
+                  {MATCH_STATUS_VALUES.map((status) => (
                     <form key={status} action={updateMatchStatus.bind(null, match.id, status)}>
                       <Button type="submit" size="sm" variant={match.status === status ? "default" : "outline"}>
                         {status}

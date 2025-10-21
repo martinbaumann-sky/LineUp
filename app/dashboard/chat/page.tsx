@@ -1,4 +1,4 @@
-import { ChatRoomType } from "@prisma/client";
+import { ChatRoomType } from "@/types/enums";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth/session";
 import { prisma } from "@/lib/prisma";
@@ -47,7 +47,7 @@ export default async function ChatPage() {
       <Card className="lg:col-span-2">
         <CardHeader>
           <CardTitle>Chat del equipo</CardTitle>
-          <CardDescription>Coordina logística, comparte noticias y mantén al plantel informado.</CardDescription>
+          <CardDescription>Coordina logística, comparte noticias y mantené al plantel informado.</CardDescription>
         </CardHeader>
         <CardContent>
           <ChatPanel

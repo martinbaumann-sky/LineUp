@@ -1,4 +1,4 @@
-import { Role } from "@prisma/client";
+import { Role, ensureRole } from "@/types/enums";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth/session";
 
@@ -21,8 +21,9 @@ export async function requireMembership(teamId: string) {
   return { session, membership };
 }
 
-export function assertRole(role: Role, allowed: Role[]) {
-  if (!allowed.includes(role)) {
+export function assertRole(role: string, allowed: Role[]) {
+  const normalizedRole = ensureRole(role);
+  if (!allowed.includes(normalizedRole)) {
     throw new Error("Permisos insuficientes");
   }
 }

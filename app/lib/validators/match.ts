@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { AvailabilityStatus, MatchStatus } from "@prisma/client";
+import { AVAILABILITY_STATUS_VALUES, MATCH_STATUS_VALUES } from "@/types/enums";
 
 export const matchSchema = z.object({
   opponent: z.string().min(2),
@@ -9,8 +9,8 @@ export const matchSchema = z.object({
   notes: z.string().optional()
 });
 
-export const matchStatusSchema = z.nativeEnum(MatchStatus);
+export const matchStatusSchema = z.enum(MATCH_STATUS_VALUES as [typeof MATCH_STATUS_VALUES[number], ...typeof MATCH_STATUS_VALUES[number][]]);
 
 export const availabilitySchema = z.object({
-  status: z.nativeEnum(AvailabilityStatus)
+  status: z.enum(AVAILABILITY_STATUS_VALUES as [typeof AVAILABILITY_STATUS_VALUES[number], ...typeof AVAILABILITY_STATUS_VALUES[number][]])
 });
