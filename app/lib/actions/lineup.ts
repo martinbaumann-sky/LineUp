@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { Role } from "@prisma/client";
+import { Role, ensureRole } from "@/types/enums";
 import { prisma } from "@/lib/prisma";
 import { assertRole, requireMembership } from "@/lib/actions/guards";
 import { lineupSchema } from "@/lib/validators/lineup";
@@ -11,7 +11,8 @@ export async function saveLineup(matchId: string, payload: unknown) {
   const match = await prisma.match.findUnique({ where: { id: matchId } });
   if (!match) throw new Error("Partido no encontrado");
   const { membership } = await requireMembership(match.teamId);
-  assertRole(membership.role, [Role.OWNER, Role.ADMIN, Role.COACH]);
+  const role = ensureRole(membership.role);
+  assertRole(role, [Role.OWNER, Role.ADMIN, Role.COACH]);
 
   const parsed = lineupSchema.safeParse(payload);
   if (!parsed.success) {

@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { MatchStatus, Role } from "@prisma/client";
+import { MATCH_STATUS_VALUES, MatchStatus, Role, ensureRole } from "@/types/enums";
 import { prisma } from "@/lib/prisma";
 import { assertRole, requireMembership } from "@/lib/actions/guards";
 import { matchSchema, availabilitySchema } from "@/lib/validators/match";
@@ -9,7 +9,8 @@ import { sendNotification } from "@/lib/actions/notification";
 
 export async function createMatch(teamId: string, formData: FormData) {
   const { membership } = await requireMembership(teamId);
-  assertRole(membership.role, [Role.OWNER, Role.ADMIN, Role.COACH]);
+  const role = ensureRole(membership.role);
+  assertRole(role, [Role.OWNER, Role.ADMIN, Role.COACH]);
   const data = Object.fromEntries(formData.entries());
   const parsed = matchSchema.safeParse(data);
   if (!parsed.success) {
@@ -48,12 +49,16 @@ export async function createMatch(teamId: string, formData: FormData) {
 }
 
 export async function updateMatchStatus(matchId: string, status: MatchStatus) {
+  if (!MATCH_STATUS_VALUES.includes(status)) {
+    throw new Error("Estado de partido inválido");
+  }
   const match = await prisma.match.findUnique({ where: { id: matchId } });
   if (!match) {
     throw new Error("Partido no encontrado");
   }
   const { membership } = await requireMembership(match.teamId);
-  assertRole(membership.role, [Role.OWNER, Role.ADMIN, Role.COACH]);
+  const role = ensureRole(membership.role);
+  assertRole(role, [Role.OWNER, Role.ADMIN, Role.COACH]);
   await prisma.match.update({ where: { id: matchId }, data: { status } });
   revalidatePath("/dashboard/fixture");
 }
@@ -64,7 +69,8 @@ export async function deleteMatch(matchId: string) {
     throw new Error("Partido no encontrado");
   }
   const { membership } = await requireMembership(match.teamId);
-  assertRole(membership.role, [Role.OWNER, Role.ADMIN]);
+  const role = ensureRole(membership.role);
+  assertRole(role, [Role.OWNER, Role.ADMIN]);
   await prisma.match.delete({ where: { id: matchId } });
   revalidatePath("/dashboard/fixture");
 }

@@ -1,4 +1,4 @@
-import { Role } from "@prisma/client";
+import { Role, ensureRole } from "@/types/enums";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth/session";
 import { prisma } from "@/lib/prisma";
@@ -61,7 +61,8 @@ export default async function SettingsPage() {
     orderBy: { createdAt: "desc" }
   });
 
-  const canManage = [Role.OWNER, Role.ADMIN].includes(membership.role);
+  const role = ensureRole(membership.role);
+  const canManage = [Role.OWNER, Role.ADMIN].includes(role);
 
   return (
     <div className="grid gap-6 lg:grid-cols-2">
@@ -139,7 +140,7 @@ export default async function SettingsPage() {
           <CardDescription>Borra el equipo o abandona si ya no necesitas acceso.</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-wrap items-center justify-between gap-4">
-          {membership.role === Role.OWNER ? (
+          {role === Role.OWNER ? (
             <form action={deleteTeam.bind(null, membership.teamId)}>
               <Button variant="destructive">Eliminar equipo</Button>
             </form>

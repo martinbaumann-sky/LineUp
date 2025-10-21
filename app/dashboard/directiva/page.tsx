@@ -1,4 +1,4 @@
-import { Role } from "@prisma/client";
+import { Role, ROLE_VALUES, ensureRole } from "@/types/enums";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth/session";
 import { prisma } from "@/lib/prisma";
@@ -22,7 +22,8 @@ export default async function BoardPage() {
     orderBy: { role: "asc" }
   });
 
-  const canManage = [Role.OWNER, Role.ADMIN].includes(membership.role);
+  const currentRole = ensureRole(membership.role);
+  const canManage = [Role.OWNER, Role.ADMIN].includes(currentRole);
 
   return (
     <div className="grid gap-6 lg:grid-cols-2">
@@ -42,17 +43,20 @@ export default async function BoardPage() {
                 <span className="text-sm font-semibold">{member.role}</span>
               </div>
               {canManage ? (
-                <form className="mt-2 flex flex-wrap items-center gap-2" action={async (formData) => {
-                  "use server";
-                  const role = formData.get("role") as Role;
-                  await updateMembershipRole(member.teamId, member.id, role);
-                }}>
+                <form
+                  className="mt-2 flex flex-wrap items-center gap-2"
+                  action={async (formData) => {
+                    "use server";
+                    const role = formData.get("role") as Role;
+                    await updateMembershipRole(member.teamId, member.id, role);
+                  }}
+                >
                   <select
                     name="role"
                     defaultValue={member.role}
                     className="h-9 rounded-md border border-input bg-background px-3 text-sm"
                   >
-                    {Object.values(Role).map((role) => (
+                    {ROLE_VALUES.map((role) => (
                       <option key={role} value={role}>
                         {role}
                       </option>
@@ -76,7 +80,10 @@ export default async function BoardPage() {
           {members
             .filter((member) => member.boardRole)
             .map((member) => (
-              <div key={member.boardRole!.id} className="flex items-center justify-between rounded-md border border-border px-3 py-2 text-sm">
+              <div
+                key={member.boardRole!.id}
+                className="flex items-center justify-between rounded-md border border-border px-3 py-2 text-sm"
+              >
                 <div>
                   <p className="font-semibold">{member.boardRole!.title}</p>
                   <p className="text-xs text-muted-foreground">{member.user.name}</p>

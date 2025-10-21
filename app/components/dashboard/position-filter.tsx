@@ -1,6 +1,6 @@
 "use client";
 
-import { Position } from "@prisma/client";
+import { Position, POSITION_VALUES } from "@/types/enums";
 
 export function PositionFilter({ value }: { value?: Position }) {
   return (
@@ -25,7 +25,7 @@ export function PositionFilter({ value }: { value?: Position }) {
         }}
       >
         <option value="">Todas</option>
-        {Object.values(Position).map((pos) => (
+        {POSITION_VALUES.map((pos) => (
           <option key={pos} value={pos}>
             {pos}
           </option>

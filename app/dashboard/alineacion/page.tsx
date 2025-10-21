@@ -1,4 +1,4 @@
-import { MatchStatus, Role } from "@prisma/client";
+import { MatchStatus, Role, ensureRole } from "@/types/enums";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth/session";
 import { prisma } from "@/lib/prisma";
@@ -43,7 +43,8 @@ export default async function LineupPage() {
     );
   }
 
-  const canEdit = [Role.OWNER, Role.ADMIN, Role.COACH].includes(membership.role);
+  const role = ensureRole(membership.role);
+  const canEdit = [Role.OWNER, Role.ADMIN, Role.COACH].includes(role);
 
   return (
     <div className="space-y-6">
@@ -62,16 +63,20 @@ export default async function LineupPage() {
               number: player.number,
               position: player.position ?? undefined
             }))}
-            existing={match.lineup ? {
-              formation: match.lineup.formation,
-              notes: match.lineup.notes ?? undefined,
-              slots: match.lineup.slots.map((slot) => ({
-                membershipId: slot.membershipId,
-                positionLabel: slot.positionLabel,
-                x: slot.x,
-                y: slot.y
-              }))
-            } : null}
+            existing={
+              match.lineup
+                ? {
+                    formation: match.lineup.formation,
+                    notes: match.lineup.notes ?? undefined,
+                    slots: match.lineup.slots.map((slot) => ({
+                      membershipId: slot.membershipId,
+                      positionLabel: slot.positionLabel,
+                      x: slot.x,
+                      y: slot.y
+                    }))
+                  }
+                : null
+            }
           />
         </CardContent>
       </Card>
