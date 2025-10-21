@@ -30,7 +30,7 @@ import {
 const navigation = [
   { name: "Funciones", href: "#features" },
   { name: "Flujo de trabajo", href: "#workflow" },
-  { name: "Métricas", href: "#metrics" }
+  { name: "Experiencias", href: "#experience" }
 ];
 
 const highlights = [
@@ -81,6 +81,19 @@ const featureTabs = [
     ]
   },
   {
+    value: "perfiles",
+    label: "Perfiles",
+    icon: Users,
+    title: "Cada jugador con su identidad",
+    description:
+      "Permite que cada integrante configure su foto, bio, dorsal y posición para que el cuerpo técnico tenga datos actualizados al instante.",
+    bullets: [
+      "Perfiles editables desde el panel",
+      "Historial de dorsales y posiciones",
+      "Datos coherentes en todo el plantel"
+    ]
+  },
+  {
     value: "estadisticas",
     label: "Estadísticas",
     icon: BarChart3,
@@ -124,21 +137,18 @@ const workflow = [
   }
 ];
 
-const metrics = [
+const experienceHighlights = [
   {
-    label: "Equipos activos",
-    value: "120+",
-    description: "Clubes que gestionan su día a día en LineUp."
+    title: "Perfiles vivos",
+    description: "Cada jugador define su avatar, bio y dorsal para mantener al staff actualizado."
   },
   {
-    label: "Tareas automatizadas",
-    value: "65%",
-    description: "Promedio de reducción de trabajo administrativo semanal."
+    title: "Equipos conectados",
+    description: "Chats y notificaciones en tiempo real centralizan la comunicación clave."
   },
   {
-    label: "Respuestas en 1 hora",
-    value: "4x",
-    description: "Mayor velocidad de confirmación de asistencia en planteles."
+    title: "Decisiones con contexto",
+    description: "Disponibilidad y alineaciones siempre accesibles para planificar sin sorpresas."
   }
 ];
 
@@ -210,8 +220,8 @@ export default function HomePage() {
                   <span>Plantel mayor</span>
                   <span>Próximo partido</span>
                 </div>
-                <p className="mt-2 text-2xl font-semibold">LineUp vs. Aurora FC</p>
-                <p className="text-sm text-muted-foreground">Domingo 18:30 hs · Estadio Central</p>
+                <p className="mt-2 text-2xl font-semibold">Tu próximo partido</p>
+                <p className="text-sm text-muted-foreground">Configura rival, fecha y sede y comparte la información con todo el plantel.</p>
               </div>
               <div className="grid gap-4 rounded-2xl bg-muted/60 p-4">
                 {mockLineup.map((player) => (
@@ -230,8 +240,8 @@ export default function HomePage() {
                 ))}
               </div>
               <div className="flex items-center justify-between text-xs text-muted-foreground">
-                <span>Asistencia confirmada: 18/22</span>
-                <span>Última actualización hace 12 min</span>
+                <span>Asistencia confirmada: datos en vivo</span>
+                <span>Sincronizado en tiempo real</span>
               </div>
             </div>
           </div>
@@ -316,24 +326,21 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section id="metrics" className="space-y-8 py-16">
+        <section id="experience" className="space-y-8 py-16">
           <div className="grid gap-4 text-center">
             <Badge variant="secondary" className="mx-auto w-fit">
-              Impacto probado en clubes reales
+              Diseñado para el día a día del club
             </Badge>
-            <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Resultados medibles desde el primer mes</h2>
+            <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Una experiencia que crece con tu plantel</h2>
             <p className="mx-auto max-w-2xl text-base text-muted-foreground">
-              Los equipos que utilizan LineUp reducen tareas repetitivas y ganan visibilidad para planificar a corto y largo plazo.
+              LineUp evoluciona con tu equipo: desde la personalización del perfil hasta la coordinación de cada partido.
             </p>
           </div>
           <div className="grid gap-6 md:grid-cols-3">
-            {metrics.map((item) => (
-              <Card key={item.label} className="border-border/70 bg-card/80 text-center backdrop-blur">
+            {experienceHighlights.map((item) => (
+              <Card key={item.title} className="border-border/70 bg-card/80 backdrop-blur">
                 <CardHeader>
-                  <CardTitle className="text-4xl font-semibold text-primary">{item.value}</CardTitle>
-                  <CardDescription className="text-base text-foreground/80">
-                    {item.label}
-                  </CardDescription>
+                  <CardTitle className="text-xl font-semibold text-primary">{item.title}</CardTitle>
                 </CardHeader>
                 <CardContent className="text-sm text-muted-foreground">{item.description}</CardContent>
               </Card>
@@ -349,14 +356,14 @@ export default function HomePage() {
               ¿Listo para llevar a tu club al siguiente nivel?
             </h2>
             <p className="mx-auto max-w-2xl text-base text-muted-foreground">
-              Agenda una demo personalizada con nuestro equipo y descubre cómo LineUp se adapta a la realidad de tu competencia.
+              Crea tu cuenta gratuita, invita a tu plantel y empieza a coordinar partidos, chats y alineaciones en minutos.
             </p>
             <div className="flex flex-wrap justify-center gap-3">
               <Button size="lg" asChild>
-                <Link href="/sign-up">Comenzar ahora</Link>
+                <Link href="/sign-up">Crear cuenta gratis</Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
-                <Link href="mailto:hola@lineup.app">Solicitar demo</Link>
+                <Link href="#features">Ver funcionalidades</Link>
               </Button>
             </div>
           </div>
@@ -385,8 +392,8 @@ export default function HomePage() {
 }
 
 const mockLineup = [
-  { number: 1, name: "M. Rodríguez", role: "Arquero", status: "Listo" },
-  { number: 4, name: "D. López", role: "Central", status: "Confirmado" },
-  { number: 5, name: "C. Silva", role: "Volante", status: "En evaluación" },
-  { number: 9, name: "F. Gómez", role: "Delantero", status: "Confirmado" }
+  { number: 1, name: "Jugador/a 1", role: "Arquero/a", status: "Confirmado" },
+  { number: 4, name: "Jugador/a 2", role: "Defensor/a", status: "Por definir" },
+  { number: 5, name: "Jugador/a 3", role: "Volante", status: "En evaluación" },
+  { number: 9, name: "Jugador/a 4", role: "Delantero/a", status: "Confirmado" }
 ];

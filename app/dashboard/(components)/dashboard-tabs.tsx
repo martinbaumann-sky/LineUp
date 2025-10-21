@@ -11,6 +11,7 @@ const routes = [
   { href: "/dashboard/fixture", label: "Fixture" },
   { href: "/dashboard/alineacion", label: "Alineación" },
   { href: "/dashboard/chat", label: "Chat" },
+  { href: "/dashboard/perfil", label: "Perfil" },
   { href: "/dashboard/directiva", label: "Directiva" },
   { href: "/dashboard/configuracion", label: "Configuración" }
 ];
