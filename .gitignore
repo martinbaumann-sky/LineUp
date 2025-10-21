@@ -3,4 +3,5 @@ node_modules/
 .next/
 .turbo/
 dist/
+app/prisma/dev.db
 
