@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { signOut } from "next-auth/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -22,16 +23,22 @@ export function DashboardUserMenu({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="flex items-center gap-2 px-2">
+        <Button variant="ghost" className="flex items-center gap-2 px-2 text-foreground">
           <Avatar className="h-9 w-9">
             <AvatarImage src={user.image ?? undefined} alt={user.name ?? "Usuario"} />
-            <AvatarFallback>{initials}</AvatarFallback>
+            <AvatarFallback className="bg-gradient-to-br from-sky-500/20 to-indigo-500/30 text-primary">
+              {initials}
+            </AvatarFallback>
           </Avatar>
           <span className="hidden text-sm font-medium sm:inline">{user.name ?? user.email}</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-48">
+      <DropdownMenuContent align="end" className="w-48 border border-primary/15">
         <DropdownMenuLabel>{user.email}</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem asChild>
+          <Link href="/dashboard/perfil">Mi perfil</Link>
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <button

@@ -13,6 +13,7 @@ model User {
   email         String         @unique
   passwordHash  String
   avatarUrl     String?
+  bio           String?
   createdAt     DateTime       @default(now())
   teams         Membership[]
   createdTeams  Team[]         @relation("UserTeams")

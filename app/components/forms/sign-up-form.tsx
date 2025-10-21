@@ -21,7 +21,6 @@ export function SignUpForm({ token }: { token?: string }) {
   });
 
   const [state, formAction] = useFormState(registerUser, initialState);
-  const { pending } = useFormStatus();
 
   useEffect(() => {
     if (state?.error) {
@@ -32,6 +31,11 @@ export function SignUpForm({ token }: { token?: string }) {
   return (
     <Form {...form}>
       <form action={formAction} className="space-y-6">
+        {state?.error ? (
+          <div className="rounded-md border border-destructive/40 bg-destructive/10 p-3 text-sm text-destructive">
+            {state.error}
+          </div>
+        ) : null}
         <FormField
           control={form.control}
           name="name"

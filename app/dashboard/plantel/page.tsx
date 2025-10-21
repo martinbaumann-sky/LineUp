@@ -1,4 +1,5 @@
-import { Position, POSITION_VALUES } from "@/types/enums";
+import type { Position } from "@/types/enums";
+import { POSITION_VALUES } from "@/types/enums";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth/session";
 import { prisma } from "@/lib/prisma";
@@ -6,7 +7,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { PositionFilter } from "@/components/dashboard/position-filter";
 
-export default async function SquadPage({ searchParams }: { searchParams: { position?: Position } }) {
+interface SearchParams {
+  position?: string;
+}
+
+export default async function SquadPage({ searchParams }: { searchParams: SearchParams }) {
   const session = await auth();
   if (!session?.user?.id) redirect("/sign-in");
   const membership = await prisma.membership.findFirst({
@@ -14,7 +19,10 @@ export default async function SquadPage({ searchParams }: { searchParams: { posi
   });
   if (!membership) redirect("/dashboard/configuracion?onboarding=1");
 
-  const requestedPosition = searchParams.position && POSITION_VALUES.includes(searchParams.position) ? searchParams.position : undefined;
+  const requestedPosition =
+    searchParams.position && POSITION_VALUES.includes(searchParams.position as Position)
+      ? (searchParams.position as Position)
+      : undefined;
 
   const players = await prisma.membership.findMany({
     where: {
@@ -38,7 +46,9 @@ export default async function SquadPage({ searchParams }: { searchParams: { posi
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h2 className="text-2xl font-semibold">Plantel</h2>
-          <p className="text-sm text-muted-foreground">Gestiona dorsales, posiciones y disponibilidad histórica.</p>
+          <p className="text-sm text-muted-foreground">
+            Gestiona dorsales, posiciones y disponibilidad histórica. Puedes actualizar tus datos desde la pestaña "Perfil".
+          </p>
         </div>
         <PositionFilter value={requestedPosition} />
       </div>
@@ -73,6 +83,14 @@ export default async function SquadPage({ searchParams }: { searchParams: { posi
             </Card>
           );
         })}
+        {players.length === 0 ? (
+          <Card>
+            <CardHeader>
+              <CardTitle>Sin jugadores cargados</CardTitle>
+              <CardDescription>Invita a tus compañeros desde la sección de Configuración.</CardDescription>
+            </CardHeader>
+          </Card>
+        ) : null}
       </div>
     </div>
   );

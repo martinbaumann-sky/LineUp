@@ -30,7 +30,7 @@ import {
 const navigation = [
   { name: "Funciones", href: "#features" },
   { name: "Flujo de trabajo", href: "#workflow" },
-  { name: "Métricas", href: "#metrics" }
+  { name: "Experiencias", href: "#experience" }
 ];
 
 const highlights = [
@@ -81,6 +81,19 @@ const featureTabs = [
     ]
   },
   {
+    value: "perfiles",
+    label: "Perfiles",
+    icon: Users,
+    title: "Cada jugador con su identidad",
+    description:
+      "Permite que cada integrante configure su foto, bio, dorsal y posición para que el cuerpo técnico tenga datos actualizados al instante.",
+    bullets: [
+      "Perfiles editables desde el panel",
+      "Historial de dorsales y posiciones",
+      "Datos coherentes en todo el plantel"
+    ]
+  },
+  {
     value: "estadisticas",
     label: "Estadísticas",
     icon: BarChart3,
@@ -124,21 +137,18 @@ const workflow = [
   }
 ];
 
-const metrics = [
+const experienceHighlights = [
   {
-    label: "Equipos activos",
-    value: "120+",
-    description: "Clubes que gestionan su día a día en LineUp."
+    title: "Perfiles vivos",
+    description: "Cada jugador define su avatar, bio y dorsal para mantener al staff actualizado."
   },
   {
-    label: "Tareas automatizadas",
-    value: "65%",
-    description: "Promedio de reducción de trabajo administrativo semanal."
+    title: "Equipos conectados",
+    description: "Chats y notificaciones en tiempo real centralizan la comunicación clave."
   },
   {
-    label: "Respuestas en 1 hora",
-    value: "4x",
-    description: "Mayor velocidad de confirmación de asistencia en planteles."
+    title: "Decisiones con contexto",
+    description: "Disponibilidad y alineaciones siempre accesibles para planificar sin sorpresas."
   }
 ];
 
@@ -172,8 +182,11 @@ export default function HomePage() {
         </header>
 
         <section className="grid gap-12 py-12 md:grid-cols-[minmax(0,1fr),minmax(0,420px)] md:items-center">
-          <div className="space-y-8">
-            <Badge variant="secondary" className="w-fit">
+          <div className="space-y-8 rounded-3xl border border-primary/15 bg-white/80 p-8 shadow-xl shadow-primary/10 backdrop-blur">
+            <Badge
+              variant="secondary"
+              className="w-fit border border-primary/30 bg-gradient-to-r from-sky-500/10 via-indigo-500/10 to-primary/10 text-primary"
+            >
               Beta abierta para clubes latinoamericanos
             </Badge>
             <div className="space-y-4">
@@ -195,25 +208,28 @@ export default function HomePage() {
             </div>
             <ul className="grid gap-3 sm:grid-cols-2">
               {highlights.map((item) => (
-                <li key={item} className="flex items-start gap-2 text-sm text-muted-foreground">
+                <li
+                  key={item}
+                  className="flex items-start gap-3 rounded-2xl border border-primary/10 bg-primary/5 p-3 text-sm text-foreground/80"
+                >
                   <CheckCircle2 className="mt-0.5 h-4 w-4 text-primary" aria-hidden />
                   <span>{item}</span>
                 </li>
               ))}
             </ul>
           </div>
-          <div className="relative overflow-hidden rounded-3xl border border-border/60 bg-card/80 p-6 shadow-2xl shadow-primary/10 backdrop-blur">
-            <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-primary/10 blur-3xl" aria-hidden />
+          <div className="relative overflow-hidden rounded-3xl border border-primary/20 bg-gradient-to-br from-white/90 via-sky-50/80 to-indigo-50/80 p-6 shadow-2xl shadow-primary/10 backdrop-blur">
+            <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-primary/20 blur-3xl" aria-hidden />
             <div className="space-y-6">
               <div>
                 <div className="flex items-center justify-between text-xs uppercase text-muted-foreground">
                   <span>Plantel mayor</span>
                   <span>Próximo partido</span>
                 </div>
-                <p className="mt-2 text-2xl font-semibold">LineUp vs. Aurora FC</p>
-                <p className="text-sm text-muted-foreground">Domingo 18:30 hs · Estadio Central</p>
+                <p className="mt-2 text-2xl font-semibold">Tu próximo partido</p>
+                <p className="text-sm text-muted-foreground">Configura rival, fecha y sede y comparte la información con todo el plantel.</p>
               </div>
-              <div className="grid gap-4 rounded-2xl bg-muted/60 p-4">
+              <div className="grid gap-4 rounded-2xl border border-primary/10 bg-white/70 p-4">
                 {mockLineup.map((player) => (
                   <div key={player.name} className="flex items-center justify-between text-sm">
                     <div className="flex items-center gap-3">
@@ -230,8 +246,8 @@ export default function HomePage() {
                 ))}
               </div>
               <div className="flex items-center justify-between text-xs text-muted-foreground">
-                <span>Asistencia confirmada: 18/22</span>
-                <span>Última actualización hace 12 min</span>
+                <span>Asistencia confirmada: datos en vivo</span>
+                <span>Sincronizado en tiempo real</span>
               </div>
             </div>
           </div>
@@ -239,7 +255,10 @@ export default function HomePage() {
 
         <section id="features" className="space-y-8 py-16">
           <div className="space-y-4 text-center">
-            <Badge variant="secondary" className="mx-auto w-fit">
+            <Badge
+              variant="secondary"
+              className="mx-auto w-fit border border-primary/30 bg-gradient-to-r from-sky-500/10 via-indigo-500/10 to-primary/10 text-primary"
+            >
               Todo lo que un cuerpo técnico necesita
             </Badge>
             <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Funcionalidades pensadas para tu staff</h2>
@@ -249,9 +268,13 @@ export default function HomePage() {
             </p>
           </div>
           <Tabs defaultValue={defaultFeatureTab} className="mx-auto w-full max-w-4xl">
-            <TabsList className="flex flex-wrap justify-center gap-2 bg-muted/60 p-2">
+            <TabsList className="flex flex-wrap justify-center gap-2 rounded-2xl border border-primary/15 bg-white/70 p-2 shadow-sm shadow-primary/10">
               {featureTabs.map((tab) => (
-                <TabsTrigger key={tab.value} value={tab.value} className="data-[state=active]:bg-background">
+                <TabsTrigger
+                  key={tab.value}
+                  value={tab.value}
+                  className="rounded-xl data-[state=active]:bg-gradient-to-r data-[state=active]:from-sky-500/15 data-[state=active]:via-primary/15 data-[state=active]:to-indigo-500/15 data-[state=active]:text-primary"
+                >
                   <tab.icon className="mr-2 h-4 w-4" aria-hidden />
                   {tab.label}
                 </TabsTrigger>
@@ -259,7 +282,7 @@ export default function HomePage() {
             </TabsList>
             {featureTabs.map((tab) => (
               <TabsContent key={tab.value} value={tab.value}>
-                <Card className="border-border/70 bg-card/80 backdrop-blur">
+                <Card className="border border-primary/15 bg-white/85 shadow-lg shadow-primary/10 backdrop-blur">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-2xl">
                       <tab.icon className="h-6 w-6 text-primary" aria-hidden />
@@ -270,7 +293,10 @@ export default function HomePage() {
                   <CardContent>
                     <ul className="grid gap-3 sm:grid-cols-3">
                       {tab.bullets.map((bullet) => (
-                        <li key={bullet} className="flex items-start gap-2 text-sm text-muted-foreground">
+                        <li
+                          key={bullet}
+                          className="flex items-start gap-3 rounded-xl border border-primary/10 bg-primary/5 p-3 text-sm text-foreground/80"
+                        >
                           <CheckCircle2 className="mt-0.5 h-4 w-4 text-primary" aria-hidden />
                           <span>{bullet}</span>
                         </li>
@@ -285,7 +311,10 @@ export default function HomePage() {
 
         <section id="workflow" className="space-y-8 py-16">
           <div className="grid gap-4 text-center">
-            <Badge variant="secondary" className="mx-auto w-fit">
+            <Badge
+              variant="secondary"
+              className="mx-auto w-fit border border-primary/30 bg-gradient-to-r from-sky-500/10 via-indigo-500/10 to-primary/10 text-primary"
+            >
               Un flujo claro de principio a fin
             </Badge>
             <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Gestiona cada partido con la misma precisión</h2>
@@ -296,9 +325,12 @@ export default function HomePage() {
           </div>
           <div className="grid gap-6 md:grid-cols-2">
             {workflow.map((step, index) => (
-              <Card key={step.title} className="border-border/70 bg-card/80 backdrop-blur">
+              <Card
+                key={step.title}
+                className="border border-primary/15 bg-gradient-to-br from-white/85 via-sky-50/80 to-indigo-50/80 shadow-lg shadow-primary/10 backdrop-blur"
+              >
                 <CardHeader className="flex flex-row items-center gap-3">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-sky-500/20 to-indigo-500/30 text-sm font-semibold text-primary">
                     {index + 1}
                   </span>
                   <div>
@@ -316,26 +348,29 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section id="metrics" className="space-y-8 py-16">
+        <section id="experience" className="space-y-8 py-16">
           <div className="grid gap-4 text-center">
-            <Badge variant="secondary" className="mx-auto w-fit">
-              Impacto probado en clubes reales
+            <Badge
+              variant="secondary"
+              className="mx-auto w-fit border border-primary/30 bg-gradient-to-r from-sky-500/10 via-indigo-500/10 to-primary/10 text-primary"
+            >
+              Diseñado para el día a día del club
             </Badge>
-            <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Resultados medibles desde el primer mes</h2>
+            <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Una experiencia que crece con tu plantel</h2>
             <p className="mx-auto max-w-2xl text-base text-muted-foreground">
-              Los equipos que utilizan LineUp reducen tareas repetitivas y ganan visibilidad para planificar a corto y largo plazo.
+              LineUp evoluciona con tu equipo: desde la personalización del perfil hasta la coordinación de cada partido.
             </p>
           </div>
           <div className="grid gap-6 md:grid-cols-3">
-            {metrics.map((item) => (
-              <Card key={item.label} className="border-border/70 bg-card/80 text-center backdrop-blur">
+            {experienceHighlights.map((item) => (
+              <Card
+                key={item.title}
+                className="border border-primary/15 bg-gradient-to-br from-white/85 via-sky-50/80 to-indigo-50/80 shadow-lg shadow-primary/10 backdrop-blur"
+              >
                 <CardHeader>
-                  <CardTitle className="text-4xl font-semibold text-primary">{item.value}</CardTitle>
-                  <CardDescription className="text-base text-foreground/80">
-                    {item.label}
-                  </CardDescription>
+                  <CardTitle className="text-xl font-semibold text-primary">{item.title}</CardTitle>
                 </CardHeader>
-                <CardContent className="text-sm text-muted-foreground">{item.description}</CardContent>
+                <CardContent className="text-sm text-foreground/80">{item.description}</CardContent>
               </Card>
             ))}
           </div>
@@ -349,20 +384,20 @@ export default function HomePage() {
               ¿Listo para llevar a tu club al siguiente nivel?
             </h2>
             <p className="mx-auto max-w-2xl text-base text-muted-foreground">
-              Agenda una demo personalizada con nuestro equipo y descubre cómo LineUp se adapta a la realidad de tu competencia.
+              Crea tu cuenta gratuita, invita a tu plantel y empieza a coordinar partidos, chats y alineaciones en minutos.
             </p>
             <div className="flex flex-wrap justify-center gap-3">
               <Button size="lg" asChild>
-                <Link href="/sign-up">Comenzar ahora</Link>
+                <Link href="/sign-up">Crear cuenta gratis</Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
-                <Link href="mailto:hola@lineup.app">Solicitar demo</Link>
+                <Link href="#features">Ver funcionalidades</Link>
               </Button>
             </div>
           </div>
         </section>
 
-        <footer className="mt-16 flex flex-col items-center gap-3 border-t border-border/60 py-8 text-center text-sm text-muted-foreground">
+        <footer className="mt-16 flex flex-col items-center gap-3 border-t border-primary/20 py-8 text-center text-sm text-muted-foreground">
           <div className="font-medium text-foreground">LineUp</div>
           <div className="flex flex-wrap justify-center gap-4">
             {navigation.map((item) => (
@@ -385,8 +420,8 @@ export default function HomePage() {
 }
 
 const mockLineup = [
-  { number: 1, name: "M. Rodríguez", role: "Arquero", status: "Listo" },
-  { number: 4, name: "D. López", role: "Central", status: "Confirmado" },
-  { number: 5, name: "C. Silva", role: "Volante", status: "En evaluación" },
-  { number: 9, name: "F. Gómez", role: "Delantero", status: "Confirmado" }
+  { number: 1, name: "Jugador/a 1", role: "Arquero/a", status: "Confirmado" },
+  { number: 4, name: "Jugador/a 2", role: "Defensor/a", status: "Por definir" },
+  { number: 5, name: "Jugador/a 3", role: "Volante", status: "En evaluación" },
+  { number: 9, name: "Jugador/a 4", role: "Delantero/a", status: "Confirmado" }
 ];

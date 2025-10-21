@@ -1,4 +1,5 @@
-import { AvailabilityStatus, MatchStatus } from "@prisma/client";
+import { AvailabilityStatus as AvailabilityStatusEnum, MatchStatus } from "@/types/enums";
+import type { AvailabilityStatus } from "@/types/enums";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth/session";
 import { prisma } from "@/lib/prisma";
@@ -41,7 +42,7 @@ export default async function DashboardHomePage() {
 
   return (
     <div className="grid gap-6 lg:grid-cols-3">
-      <div className="lg:col-span-2 space-y-6">
+      <div className="space-y-6 lg:col-span-2">
         <Card>
           <CardHeader>
             <CardTitle>Próximo partido</CardTitle>
@@ -60,14 +61,8 @@ export default async function DashboardHomePage() {
                   <Badge variant="secondary">{nextMatch.competition ?? "Amistoso"}</Badge>
                 </div>
                 <form action={setAvailability.bind(null, nextMatch.id)} className="flex gap-2">
-                  {Object.values(AvailabilityStatus).map((status) => (
-                    <Button
-                      key={status}
-                      name="status"
-                      value={status}
-                      type="submit"
-                      variant="outline"
-                    >
+                  {Object.values(AvailabilityStatusEnum).map((status) => (
+                    <Button key={status} name="status" value={status} type="submit" variant="outline">
                       {availabilityCopy[status]}
                     </Button>
                   ))}

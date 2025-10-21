@@ -16,6 +16,7 @@ export function SignInForm() {
   const router = useRouter();
   const params = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: { email: "", password: "" }
@@ -25,17 +26,27 @@ export function SignInForm() {
   const callbackUrl = params?.get("callbackUrl") ?? "/dashboard/inicio";
 
   async function onSubmit(values: z.infer<typeof loginSchema>) {
-    setIsLoading(true);
-    const result = await signIn("credentials", {
-      ...values,
-      redirect: false
-    });
-    setIsLoading(false);
-    if (result?.error) {
-      toast.error(result.error);
-      return;
+    try {
+      setIsLoading(true);
+      setFormError(null);
+      const result = await signIn("credentials", {
+        ...values,
+        redirect: false
+      });
+      if (result?.error) {
+        setFormError(result.error);
+        toast.error(result.error);
+        return;
+      }
+      router.push(callbackUrl);
+    } catch (error) {
+      console.error(error);
+      const message = "Ocurrió un error al iniciar sesión. Intenta nuevamente.";
+      setFormError(message);
+      toast.error(message);
+    } finally {
+      setIsLoading(false);
     }
-    router.push(callbackUrl);
   }
 
   return (
@@ -44,6 +55,11 @@ export function SignInForm() {
         {registered ? (
           <div className="rounded-md border border-green-500/40 bg-green-500/10 p-3 text-sm text-green-600 dark:text-green-300">
             Cuenta creada, inicia sesión.
+          </div>
+        ) : null}
+        {formError ? (
+          <div className="rounded-md border border-destructive/40 bg-destructive/10 p-3 text-sm text-destructive">
+            {formError}
           </div>
         ) : null}
         <FormField
