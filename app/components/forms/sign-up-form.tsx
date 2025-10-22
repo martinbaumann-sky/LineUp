@@ -10,9 +10,9 @@ import { Input } from "@/components/ui/input";
 import { useFormState, useFormStatus } from "react-dom";
 import { useEffect } from "react";
 import { toast } from "sonner";
-import { registerUser } from "@/lib/actions/auth";
+import { registerUser, type RegisterActionState } from "@/lib/actions/auth";
 
-const initialState = { error: "" };
+const initialState: RegisterActionState = { error: null };
 
 export function SignUpForm({ token }: { token?: string }) {
   const form = useForm<z.infer<typeof registerSchema>>({

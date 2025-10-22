@@ -1,0 +1,38 @@
+import Link from "next/link";
+import type { Metadata } from "next";
+
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { SignInForm } from "@/components/forms/sign-in-form";
+import { AuthShell } from "@/components/layout/auth-shell";
+
+export const metadata: Metadata = {
+  title: "LineUp | Iniciar sesión",
+  description: "Ingresa para gestionar tu equipo."
+};
+
+export default function SignInPage() {
+  return (
+    <AuthShell>
+      <Card className="w-full border border-border/60 bg-background/95 shadow-xl shadow-primary/10">
+        <CardHeader className="space-y-2 text-center">
+          <CardTitle className="text-2xl font-semibold tracking-tight">Bienvenido de vuelta</CardTitle>
+          <CardDescription className="text-sm text-muted-foreground">
+            Ingresa con tus credenciales para retomar la gestión de tu club.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <SignInForm />
+          <div className="rounded-lg bg-primary/5 p-3 text-xs text-muted-foreground">
+            Consejo: guarda LineUp en tus favoritos para acceder rápido a convocatorias y chats de equipo.
+          </div>
+          <p className="text-sm text-muted-foreground text-center">
+            ¿No tienes cuenta? {" "}
+            <Link href="/sign-up" className="font-semibold text-primary">
+              Regístrate
+            </Link>
+          </p>
+        </CardContent>
+      </Card>
+    </AuthShell>
+  );
+}
